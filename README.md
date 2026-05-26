@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Audra
 
-## Getting Started
+Audra is an AI-powered SaaS platform that transforms videos into transcripts, concise summaries, and actionable notes.
+Upload a video and let Audra handle audio extraction, speech-to-text transcription, and AI summarization through a scalable fullstack processing pipeline.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- Upload MP4 meeting or discussion videos
+- AI-powered speech-to-text transcription
+- Automatic meeting summaries
+- Actionable note generation
+- Background media processing pipeline
+- Responsive modern SaaS UI
+- Dark/light theme support
+- Scalable architecture for async processing
+
+---
+
+## Tech Stack
+
+### Frontend
+- Next.js App Router
+- React
+- TypeScript
+- Tailwind CSS
+
+### Backend
+- Next.js Route Handlers
+- PostgreSQL
+- Prisma ORM
+
+### AI & Media Processing
+- FFmpeg
+- Groq Whisper API
+- Groq LLM APIs
+
+### Storage & Infrastructure
+- Cloudflare R2
+- Background Jobs / Queue Processing
+
+---
+
+## Architecture Overview
+
+```text
+Client Upload
+    ↓
+Cloudflare R2 Storage
+    ↓
+PostgreSQL Metadata Storage
+    ↓
+Background Processing Worker
+    ↓
+FFmpeg Audio Extraction & Compression
+    ↓
+Groq Whisper Transcription
+    ↓
+Groq LLM Summarization
+    ↓
+Summary + Transcript Persistence
+    ↓
+Frontend Rendering
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Status
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Currently under active development.
 
-## Learn More
+More features, infrastructure improvements, and realtime AI workflows coming soon.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+— END —
+```
