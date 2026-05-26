@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f6f1eb;
+  --text: #211714;
+  --headline: #201612;
+  --muted: #6d5d57;
+  --soft-muted: #a3928b;
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-strong: rgba(255, 255, 255, 0.7);
+  --surface-border: rgba(255, 255, 255, 0.7);
+  --chip-bg: rgba(255, 255, 255, 0.8);
+  --chip-border: #e7d8ce;
+  --chip-text: #7d685f;
+  --toggle-bg: #ffffff;
+  --toggle-border: #d4d4d8;
+  --toggle-text: #09090b;
+  --upload-bg: #171412;
+  --upload-border: rgba(255, 255, 255, 0.12);
+  --upload-text: #fff8f2;
+  --upload-icon-bg: rgba(255, 255, 255, 0.1);
+  --upload-icon-border: rgba(255, 255, 255, 0.2);
+  --upload-shadow: 0 14px 24px rgba(33, 14, 10, 0.28);
+  --upload-shadow-hover: 0 18px 30px rgba(33, 14, 10, 0.34);
+  --hero-radial: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  --hero-bottom-fade: linear-gradient(
+    180deg,
+    rgba(246, 241, 235, 0) 0%,
+    rgba(232, 221, 212, 0.75) 100%
+  );
+  --blob-left: rgba(234, 217, 203, 0.4);
+  --blob-right: #fdf9f5;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html.dark {
+  --bg: #130f0d;
+  --text: #f0e6de;
+  --headline: #fff8f2;
+  --muted: #c2b4ab;
+  --soft-muted: #95847a;
+  --surface: rgba(34, 27, 23, 0.82);
+  --surface-strong: rgba(28, 22, 18, 0.94);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --chip-bg: rgba(36, 28, 24, 0.78);
+  --chip-border: #4a3931;
+  --chip-text: #d6c6bc;
+  --toggle-bg: #221b17;
+  --toggle-border: #4f4038;
+  --toggle-text: #f7efe8;
+  --upload-bg: var(--surface);
+  --upload-border: var(--surface-border);
+  --upload-text: var(--headline);
+  --upload-icon-bg: rgba(255, 255, 255, 0.08);
+  --upload-icon-border: rgba(255, 255, 255, 0.12);
+  --upload-shadow: 0 14px 24px rgba(0, 0, 0, 0.24);
+  --upload-shadow-hover: 0 18px 30px rgba(0, 0, 0, 0.32);
+  --hero-radial: radial-gradient(
+    circle,
+    rgba(92, 66, 48, 0.24) 0%,
+    rgba(19, 15, 13, 0) 70%
+  );
+  --hero-bottom-fade: linear-gradient(
+    180deg,
+    rgba(19, 15, 13, 0) 0%,
+    rgba(44, 31, 24, 0.72) 100%
+  );
+  --blob-left: rgba(111, 77, 58, 0.22);
+  --blob-right: rgba(72, 53, 43, 0.28);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition:
+    background-color 300ms ease-out,
+    color 300ms ease-out;
+}
+
+.upload-button {
+  background: var(--upload-bg);
+  border: 1px solid var(--upload-border);
+  box-shadow: var(--upload-shadow);
+  color: var(--upload-text);
+}
+
+.upload-button:hover {
+  box-shadow: var(--upload-shadow-hover);
+}
+
+.upload-button-icon {
+  background: var(--upload-icon-bg);
+  border: 1px solid var(--upload-icon-border);
 }
