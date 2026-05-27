@@ -37,7 +37,7 @@ Upload a video and let Audra handle audio extraction, speech-to-text transcripti
 - Groq LLM APIs
 
 ### Storage & Infrastructure
-- Cloudflare R2
+- UploadThing
 - Background Jobs / Queue Processing
 
 ---
