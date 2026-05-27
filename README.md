@@ -38,7 +38,7 @@ Upload a video and let Audra handle audio extraction, speech-to-text transcripti
 
 ### Storage & Infrastructure
 - UploadThing
-- Background Jobs / Queue Processing
+- BullMQ, Redis
 
 ---
 
