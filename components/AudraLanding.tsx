@@ -55,7 +55,7 @@ export function AudraLanding() {
             width={0}
             height={0}
             unoptimized
-            className="groq-badge-light h-12 w-auto opacity-80 transition hover:opacity-100"
+            className="groq-badge-light h-10 w-auto opacity-80 transition hover:opacity-100"
           />
           <Image
             src="https://console.groq.com/powered-by-groq-light.svg"
@@ -63,7 +63,7 @@ export function AudraLanding() {
             width={0}
             height={0}
             unoptimized
-            className="groq-badge-dark h-12 w-auto opacity-80 transition hover:opacity-100"
+            className="groq-badge-dark h-10 w-auto opacity-80 transition hover:opacity-100"
           />
         </a>
       </div>
