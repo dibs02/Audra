@@ -47,7 +47,7 @@ export function AudraLanding() {
           </div>
         </div>
       </section>
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed top-6 right-6 z-50">
         <a href="https://groq.com" target="_blank" rel="noopener noreferrer">
           <Image
             src="https://console.groq.com/powered-by-groq-dark.svg"
