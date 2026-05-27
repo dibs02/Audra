@@ -47,7 +47,7 @@ Upload a video and let Audra handle audio extraction, speech-to-text transcripti
 ```text
 Client Upload
     ↓
-Cloudflare R2 Storage
+UploadThing Storage
     ↓
 PostgreSQL Metadata Storage
     ↓
