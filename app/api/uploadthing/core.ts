@@ -24,13 +24,13 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
       console.log("file url", file.ufsUrl);
-      await videoqueue.add("video", {
+      const job = await videoqueue.add("video", {
         url: file.ufsUrl,
         userId: metadata.userId,
       });
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+      return { uploaded: true, jobId: job.id };
     }),
 } satisfies FileRouter;
 export type OurFileRouter = typeof ourFileRouter;
