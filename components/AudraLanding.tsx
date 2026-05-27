@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import { Mp4UploadButton } from "./Mp4UploadButton";
+import Image from "next/image";
 
 export function AudraLanding() {
   return (
@@ -46,6 +47,26 @@ export function AudraLanding() {
           </div>
         </div>
       </section>
+      <div className="fixed bottom-4 right-4 z-50">
+        <a href="https://groq.com" target="_blank" rel="noopener noreferrer">
+          <Image
+            src="https://console.groq.com/powered-by-groq-dark.svg"
+            alt="Powered by Groq for fast inference."
+            width={0}
+            height={0}
+            unoptimized
+            className="groq-badge-light h-12 w-auto opacity-80 transition hover:opacity-100"
+          />
+          <Image
+            src="https://console.groq.com/powered-by-groq-light.svg"
+            alt="Powered by Groq for fast inference."
+            width={0}
+            height={0}
+            unoptimized
+            className="groq-badge-dark h-12 w-auto opacity-80 transition hover:opacity-100"
+          />
+        </a>
+      </div>
     </main>
   );
 }
