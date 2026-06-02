@@ -28,7 +28,7 @@ export const ourFileRouter = {
         url: file.ufsUrl,
         userId: metadata.userId,
       });
-
+      console.log(job.data);
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploaded: true, jobId: job.id };
     }),

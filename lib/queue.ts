@@ -1,7 +1,6 @@
 import { Queue } from "bullmq";
+import { createRedisConnection } from "./redis";
 
 export const videoqueue = new Queue("videoqueue", {
-  connection: {
-    url: process.env.REDIS_URL,
-  },
+  connection: createRedisConnection(),
 });
