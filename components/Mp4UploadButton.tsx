@@ -32,7 +32,7 @@ export function Mp4UploadButton() {
   };
 
   return (
-    <div className="flex w-full max-w-md justify-center">
+    <div className="flex w-full max-w-sm justify-center">
       <input
         ref={fileInputRef}
         type="file"
@@ -45,9 +45,9 @@ export function Mp4UploadButton() {
         type="button"
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
-        className="upload-button group flex w-56 cursor-pointer items-center justify-center gap-3 rounded-full py-4 pl-6 pr-10 transition duration-200 hover:-translate-y-0.5 sm:w-64"
+        className="upload-button group flex w-52 cursor-pointer items-center justify-center gap-2.5 rounded-full py-3.5 pl-5 pr-8 transition duration-200 hover:-translate-y-0.5 sm:w-56"
       >
-        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-md transition duration-200 group-hover:border-white/30 group-hover:bg-white/15">
+        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-md transition duration-200 group-hover:border-white/30 group-hover:bg-white/15">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -58,7 +58,7 @@ export function Mp4UploadButton() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="h-5 w-5"
+            className="h-4 w-4"
             aria-hidden="true"
           >
             <path d="M12 16V4" />
@@ -66,7 +66,7 @@ export function Mp4UploadButton() {
             <path d="M20 16v4H4v-4" />
           </svg>
         </span>
-        <span className="[font-family:var(--font-rosario)] text-xl font-bold tracking-wide">
+        <span className="[font-family:var(--font-rosario)] text-lg font-bold tracking-wide">
           {isUploading ? "Uploading..." : "Upload"}
         </span>
       </button>

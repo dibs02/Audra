@@ -23,10 +23,10 @@ export default function Navbar() {
   }
 
   return (
-    <header className="mx-auto flex w-full max-w-2xl items-center justify-between rounded-full border border-(--surface-border) bg-(--surface) px-7 py-4 shadow-[0_16px_48px_rgba(40,21,13,0.06)] backdrop-blur transition-colors duration-300 ease-out">
-      <div className="flex items-center gap-3">
-        <Image src={Logo} alt="Audra logo" className="h-8 w-8" />
-        <p className="text-2xl font-black [font-family:var(--font-rosario)] tracking-wide text-(--headline) transition-colors duration-300 ease-out">
+    <header className="mx-auto flex w-full max-w-xl items-center justify-between rounded-full border border-(--surface-border) bg-(--surface) px-6 py-3 shadow-[0_14px_40px_rgba(40,21,13,0.06)] backdrop-blur transition-colors duration-300 ease-out">
+      <div className="flex items-center gap-2.5">
+        <Image src={Logo} alt="Audra logo" className="h-7 w-7" />
+        <p className="text-xl font-black [font-family:var(--font-rosario)] tracking-wide text-(--headline) transition-colors duration-300 ease-out">
           Audra
         </p>
       </div>
@@ -35,7 +35,7 @@ export default function Navbar() {
           type="button"
           aria-label="Toggle theme"
           onClick={toggleTheme}
-          className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-(--toggle-border) bg-(--toggle-bg) text-(--toggle-text) transition-colors duration-300 ease-out"
+          className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-(--toggle-border) bg-(--toggle-bg) text-(--toggle-text) transition-colors duration-300 ease-out"
         >
           <span className="flex items-center justify-center transition-transform duration-300 ease-out">
             {isDark ? (
@@ -49,7 +49,7 @@ export default function Navbar() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4"
+                className="h-3.5 w-3.5"
                 aria-hidden="true"
               >
                 <circle cx="12" cy="12" r="4" />
@@ -73,7 +73,7 @@ export default function Navbar() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4"
+                className="h-3.5 w-3.5"
                 aria-hidden="true"
               >
                 <path d="M12 3a6 6 0 1 0 9 9 9 9 0 1 1-9-9z" />
