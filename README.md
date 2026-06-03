@@ -38,7 +38,13 @@ Upload a video and let Audra handle audio extraction, speech-to-text transcripti
 
 ### Storage & Infrastructure
 - UploadThing
-- BullMQ, Redis
+- BullMQ
+- Redis(Upstash)
+
+### Deployment
+- Vercel (Web Application)
+- Railway (Background Worker Service)
+- Upstash (Managed Redis)
 
 ---
 
