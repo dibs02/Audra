@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-import { videoqueue } from "@/lib/queue";
 
 const f = createUploadthing();
 
@@ -24,13 +23,9 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
       console.log("file url", file.ufsUrl);
-      const job = await videoqueue.add("video", {
-        url: file.ufsUrl,
-        userId: metadata.userId,
-      });
-      console.log(job.data);
+
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploaded: true, jobId: job.id };
+      return { message: "Upload complete" };
     }),
 } satisfies FileRouter;
 export type OurFileRouter = typeof ourFileRouter;
