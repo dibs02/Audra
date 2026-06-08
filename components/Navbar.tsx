@@ -1,17 +1,39 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import Logo from "../public/assets/audra.png";
 
-export default function Navbar() {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document === "undefined") {
-      return false;
-    }
+function subscribeToThemeChanges(onStoreChange: () => void) {
+  const observer = new MutationObserver(onStoreChange);
 
-    return document.documentElement.classList.contains("dark");
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
   });
+
+  window.addEventListener("storage", onStoreChange);
+
+  return () => {
+    observer.disconnect();
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
+
+function getThemeSnapshot() {
+  return document.documentElement.classList.contains("dark");
+}
+
+function getServerThemeSnapshot() {
+  return false;
+}
+
+export default function Navbar() {
+  const isDark = useSyncExternalStore(
+    subscribeToThemeChanges,
+    getThemeSnapshot,
+    getServerThemeSnapshot
+  );
 
   function toggleTheme() {
     const root = document.documentElement;
@@ -19,7 +41,6 @@ export default function Navbar() {
 
     root.classList.toggle("dark", nextIsDark);
     window.localStorage.setItem("theme", nextIsDark ? "dark" : "light");
-    setIsDark(nextIsDark);
   }
 
   return (
