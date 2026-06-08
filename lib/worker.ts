@@ -1,7 +1,8 @@
 import { loadEnvConfig } from "@next/env";
-import { prisma } from "@/lib/prisma";
 
 loadEnvConfig(process.cwd());
+
+const { prisma } = await import("@/lib/prisma");
 
 async function processJob(job: { id: string; fileUrl: string }) {
   console.log("Processing job:", job.id, job.fileUrl);
@@ -15,7 +16,7 @@ async function claimJob() {
 
   if (!job) return null;
 
-  const claimed = await prisma.job.update({
+  const claimed = await prisma.job.updateMany({
     where: {
       id: job.id,
       status: "PENDING",
@@ -25,7 +26,7 @@ async function claimJob() {
     },
   });
 
-  if (!claimed) return null;
+  if (claimed.count === 0) return null;
 
   return job;
 }
@@ -35,8 +36,8 @@ async function main() {
     const job = await claimJob();
 
     if (!job) {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      continue;
+      console.log("No pending jobs found");
+      break;
     }
 
     try {
@@ -63,4 +64,11 @@ async function main() {
   }
 }
 
-main();
+main()
+  .catch((error) => {
+    console.error("Worker failed", error);
+    process.exitCode = 1;
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
