@@ -2,7 +2,7 @@ import { loadEnvConfig } from "@next/env";
 
 loadEnvConfig(process.cwd());
 
-const { prisma } = await import("@/lib/prisma");
+let prisma: Awaited<typeof import("@/lib/prisma")>["prisma"];
 
 async function processJob(job: { id: string; fileUrl: string }) {
   console.log("Processing job:", job.id, job.fileUrl);
@@ -32,6 +32,8 @@ async function claimJob() {
 }
 
 async function main() {
+  ({ prisma } = await import("@/lib/prisma"));
+
   while (true) {
     const job = await claimJob();
 
@@ -70,5 +72,5 @@ main()
     process.exitCode = 1;
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await prisma?.$disconnect();
   });
