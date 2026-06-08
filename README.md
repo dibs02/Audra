@@ -38,8 +38,6 @@ Upload a video and let Audra handle audio extraction, speech-to-text transcripti
 
 ### Storage & Infrastructure
 - UploadThing
-- BullMQ
-- Redis (Upstash)
 
 ### Deployment
 - Vercel (Web Application)
