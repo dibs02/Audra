@@ -42,7 +42,7 @@ async function main() {
     try {
       await processJob(job);
 
-      await prisma.job.update({
+      const updatedJob = await prisma.job.update({
         where: {
           id: job.id,
         },
@@ -51,7 +51,7 @@ async function main() {
         },
       });
 
-      console.log("Job completed", job);
+      console.log("Job completed", updatedJob);
     } catch (error) {
       console.error("Job failed", job.id, error);
 
