@@ -1,4 +1,6 @@
 import { loadEnvConfig } from "@next/env";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 loadEnvConfig(process.cwd());
 
@@ -6,11 +8,24 @@ let prisma: Awaited<typeof import("@/lib/prisma")>["prisma"];
 
 async function processJob(job: { id: string; fileUrl: string }) {
   console.log("Processing job:", job.id, job.fileUrl);
+
+  const response = await fetch(job.fileUrl);
+  const arrayBuffer = await response.arrayBuffer();
+
+  const inputPath = path.join(process.cwd(), "/tmp", "/input.mp4");
+
+  await fs.mkdir(path.dirname(inputPath), { recursive: true });
+
+  await fs.writeFile(inputPath, Buffer.from(arrayBuffer));
 }
 
 async function claimJob() {
   const job = await prisma.job.findFirst({
-    where: { status: "PENDING" },
+    where: {
+      status: {
+        in: ["PENDING", "FAILED"],
+      },
+    },
     orderBy: { createdAt: "asc" },
   });
 
@@ -19,7 +34,9 @@ async function claimJob() {
   const claimed = await prisma.job.updateMany({
     where: {
       id: job.id,
-      status: "PENDING",
+      status: {
+        in: ["PENDING", "FAILED"],
+      },
     },
     data: {
       status: "PROCESSING",
