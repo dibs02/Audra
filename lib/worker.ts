@@ -1,6 +1,8 @@
 import { loadEnvConfig } from "@next/env";
 import fs from "node:fs/promises";
 import path from "node:path";
+import ffmpeg from "@ffmpeg-installer/ffmpeg";
+import { execSync } from "node:child_process";
 
 loadEnvConfig(process.cwd());
 
@@ -13,10 +15,19 @@ async function processJob(job: { id: string; fileUrl: string }) {
   const arrayBuffer = await response.arrayBuffer();
 
   const inputPath = path.join(process.cwd(), "/tmp", "/input.mp4");
+  const outputPath = path.join(process.cwd(), "/tmp", "/output.mp3");
 
   await fs.mkdir(path.dirname(inputPath), { recursive: true });
 
   await fs.writeFile(inputPath, Buffer.from(arrayBuffer));
+  console.log("Video saved");
+
+  await execSync(`"${ffmpeg.path}" -i "${inputPath}" -vn "${outputPath}" -y`);
+
+  console.log("Audio saved");
+
+  const stat = await fs.stat(outputPath);
+  console.log("Audio size : " + stat.size);
 }
 
 async function claimJob() {
@@ -56,6 +67,7 @@ async function main() {
 
     if (!job) {
       console.log("No pending jobs found");
+      console.log(ffmpeg.version);
       break;
     }
 
