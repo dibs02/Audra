@@ -1,14 +1,16 @@
 import { loadEnvConfig } from "@next/env";
 import fs from "node:fs/promises";
+import { createReadStream } from "node:fs";
 import path from "node:path";
 import ffmpeg from "@ffmpeg-installer/ffmpeg";
 import { execSync } from "node:child_process";
+import { Groq } from "groq-sdk";
 
 loadEnvConfig(process.cwd());
 
 let prisma: Awaited<typeof import("@/lib/prisma")>["prisma"];
 
-async function processJob(job: { id: string; fileUrl: string }) {
+async function audioExtract(job: { id: string; fileUrl: string }) {
   console.log("Processing job:", job.id, job.fileUrl);
 
   const response = await fetch(job.fileUrl);
@@ -23,11 +25,9 @@ async function processJob(job: { id: string; fileUrl: string }) {
   console.log("Video saved");
 
   await execSync(`"${ffmpeg.path}" -i "${inputPath}" -vn "${outputPath}" -y`);
-
   console.log("Audio saved");
 
-  const stat = await fs.stat(outputPath);
-  console.log("Audio size : " + stat.size);
+  return outputPath;
 }
 
 async function claimJob() {
@@ -59,6 +59,20 @@ async function claimJob() {
   return job;
 }
 
+async function groqTranscribe(outputPath: string) {
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+  const transcription = await groq.audio.transcriptions.create({
+    file: createReadStream(outputPath),
+    model: "whisper-large-v3-turbo",
+    prompt: "Specify context or spelling",
+    response_format: "verbose_json",
+    timestamp_granularities: ["word", "segment"],
+  });
+
+  console.log(transcription.text);
+}
+
 async function main() {
   ({ prisma } = await import("@/lib/prisma"));
 
@@ -72,7 +86,9 @@ async function main() {
     }
 
     try {
-      await processJob(job);
+      const outputPath = await audioExtract(job);
+
+      await groqTranscribe(outputPath);
 
       const updatedJob = await prisma.job.update({
         where: {
