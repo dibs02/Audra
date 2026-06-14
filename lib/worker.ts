@@ -16,8 +16,11 @@ async function audioExtract(job: { id: string; fileUrl: string }) {
   const response = await fetch(job.fileUrl);
   const arrayBuffer = await response.arrayBuffer();
 
-  const inputPath = path.join(process.cwd(), "/tmp", "/input.mp4");
-  const outputPath = path.join(process.cwd(), "/tmp", "/output.mp3");
+  const tempDir = path.join(process.cwd(), "tmp");
+
+  const inputPath = path.join(tempDir, `${job.id}_input.mp4`);
+
+  const outputPath = path.join(tempDir, `${job.id}_output.mp3`);
 
   await fs.mkdir(path.dirname(inputPath), { recursive: true });
 
@@ -27,7 +30,7 @@ async function audioExtract(job: { id: string; fileUrl: string }) {
   await execSync(`"${ffmpeg.path}" -i "${inputPath}" -vn "${outputPath}" -y`);
   console.log("Audio saved");
 
-  return outputPath;
+  return { inputPath, outputPath, job };
 }
 
 async function claimJob() {
@@ -59,7 +62,11 @@ async function claimJob() {
   return job;
 }
 
-async function groqTranscribe(outputPath: string) {
+async function groqTranscribe(
+  outputPath: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  job: { id: string; fileUrl: string },
+) {
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
   const transcription = await groq.audio.transcriptions.create({
@@ -70,7 +77,7 @@ async function groqTranscribe(outputPath: string) {
     timestamp_granularities: ["word", "segment"],
   });
 
-  console.log(transcription.text);
+  return transcription.text;
 }
 
 async function main() {
@@ -85,16 +92,23 @@ async function main() {
       break;
     }
 
-    try {
-      const outputPath = await audioExtract(job);
+    let inputPath = "";
+    let outputPath = "";
 
-      await groqTranscribe(outputPath);
+    try {
+      const result = await audioExtract(job);
+
+      inputPath = result.inputPath;
+      outputPath = result.outputPath;
+
+      const text = await groqTranscribe(outputPath, job);
 
       const updatedJob = await prisma.job.update({
         where: {
           id: job.id,
         },
         data: {
+          transcript: text,
           status: "COMPLETED",
         },
       });
@@ -107,6 +121,11 @@ async function main() {
         where: { id: job.id },
         data: { status: "FAILED" },
       });
+    } finally {
+      await Promise.all([
+        await fs.unlink(inputPath),
+        await fs.unlink(outputPath),
+      ]);
     }
   }
 }
