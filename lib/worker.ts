@@ -4,7 +4,7 @@ import { createReadStream } from "node:fs";
 import path from "node:path";
 import ffmpeg from "@ffmpeg-installer/ffmpeg";
 import { execSync } from "node:child_process";
-import { Groq } from "groq-sdk";
+import { groq } from "../lib/groq";
 
 loadEnvConfig(process.cwd());
 
@@ -67,8 +67,6 @@ async function groqTranscribe(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   job: { id: string; fileUrl: string },
 ) {
-  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
   const transcription = await groq.audio.transcriptions.create({
     file: createReadStream(outputPath),
     model: "whisper-large-v3-turbo",
@@ -78,6 +76,21 @@ async function groqTranscribe(
   });
 
   return transcription.text;
+}
+
+async function groqSummarize(transcript: string) {
+  const result = await groq.chat.completions.create({
+    model: "openai/gpt-oss-120b",
+
+    messages: [
+      {
+        role: "user",
+        content: `Summarize:\n${transcript}`,
+      },
+    ],
+  });
+
+  return result.choices[0].message.content;
 }
 
 async function main() {
@@ -101,14 +114,16 @@ async function main() {
       inputPath = result.inputPath;
       outputPath = result.outputPath;
 
-      const text = await groqTranscribe(outputPath, job);
+      const transcript = await groqTranscribe(outputPath, job);
+
+      const summary = await groqSummarize(transcript);
 
       const updatedJob = await prisma.job.update({
         where: {
           id: job.id,
         },
         data: {
-          transcript: text,
+          summary: summary,
           status: "COMPLETED",
         },
       });
