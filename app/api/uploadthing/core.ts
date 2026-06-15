@@ -35,8 +35,8 @@ export const ourFileRouter = {
 
       console.log(job);
 
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { message: "Upload complete" };
+      // Whatever is returned here is sent to the clientside `onClientUploadComplete` callback.
+      return { jobId: job.id, status: job.status };
     }),
 } satisfies FileRouter;
 export type OurFileRouter = typeof ourFileRouter;

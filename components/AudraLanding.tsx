@@ -27,22 +27,18 @@ export function AudraLanding() {
       <section className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-5 sm:px-7 lg:px-8">
         <Navbar />
 
-        <div className="mx-auto my-10 flex max-w-3xl flex-col items-center py-10 text-center sm:py-12">
-          <div className="inline-flex items-center rounded-full border border-(--chip-border) bg-(--chip-bg) px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-(--chip-text) [font-family:var(--font-rosario)] shadow-[0_10px_26px_rgba(42,25,18,0.06)] transition-colors duration-300 ease-out">
-            From upload to lucid notes
-          </div>
-
-          <h1 className="mt-7 max-w-3xl text-4xl font-black [font-family:var(--font-rosario)] leading-[0.96] tracking-normal text-(--headline) transition-colors duration-300 ease-out sm:text-5xl lg:text-[3.4rem]">
+        <div className="mx-auto mt-1 mb-4 flex max-w-2xl flex-col items-center py-10 text-center sm:py-12">
+          <h1 className="mt-7 max-w-3xl text-3xl font-black [font-family:var(--font-rosario)] leading-[0.98] tracking-normal text-(--headline) transition-colors duration-300 ease-out sm:text-4xl lg:text-[3rem]">
             Turn raw videos into polished notes with Audra.
           </h1>
 
-          <p className="mt-5 max-w-2xl text-sm italic leading-7 tracking-wide text-(--muted) transition-colors duration-300 ease-out sm:text-base">
+          <p className="mt-4 max-w-xl text-xs italic leading-6 tracking-wide text-(--muted) transition-colors duration-300 ease-out sm:text-sm">
             Upload a video in any format and let Audra handle rapid transcript
             generation, compression-ready processing, and AI summaries designed
             for fast review.
           </p>
 
-          <div className="mt-8 flex w-full justify-center">
+          <div className="mt-6 flex w-full justify-center">
             <Mp4UploadButton />
           </div>
         </div>
