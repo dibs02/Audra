@@ -42,7 +42,6 @@ Upload a video and let Audra handle audio extraction, speech-to-text transcripti
 ### Deployment
 - Vercel (Web Application)
 - Railway (Background Worker Service)
-- Upstash (Managed Redis)
 
 ---
 
