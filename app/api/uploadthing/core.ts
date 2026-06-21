@@ -1,11 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { prisma } from "@/lib/prisma";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" });
+function getAnonymousUserId(req: Request) {
+  const userId = req.headers.get("x-anonymous-user-id");
+
+  if (!userId?.startsWith("anon_")) {
+    throw new UploadThingError("Missing anonymous user id");
+  }
+
+  return userId;
+}
 
 export const ourFileRouter = {
   videoUploader: f({
@@ -15,11 +22,7 @@ export const ourFileRouter = {
     },
   })
     .middleware(async ({ req }) => {
-      const user = await auth(req);
-
-      if (!user) throw new UploadThingError("Unauthorized");
-
-      return { userId: user.id };
+      return { userId: getAnonymousUserId(req) };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);

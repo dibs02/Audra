@@ -10,6 +10,24 @@ type JobResponse = {
   summary: string | null;
 };
 
+const ANONYMOUS_USER_ID_KEY = "audraAnonymousUserId";
+
+function getAnonymousUserId() {
+  const existingId = window.localStorage.getItem(ANONYMOUS_USER_ID_KEY);
+
+  if (existingId) return existingId;
+
+  const nextId =
+    typeof window.crypto?.randomUUID === "function"
+      ? window.crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  const anonymousUserId = `anon_${nextId}`;
+  window.localStorage.setItem(ANONYMOUS_USER_ID_KEY, anonymousUserId);
+
+  return anonymousUserId;
+}
+
 function getJobStatusCopy(status: JobResponse["status"]) {
   if (status === "COMPLETED") {
     return {
@@ -40,6 +58,9 @@ export function Mp4UploadButton() {
   const [job, setJob] = useState<JobResponse | null>(null);
 
   const { startUpload, isUploading } = useUploadThing("videoUploader", {
+    headers: () => ({
+      "x-anonymous-user-id": getAnonymousUserId(),
+    }),
     onClientUploadComplete: (res) => {
       console.log("Upload complete:", res);
       const jobId = res[0]?.serverData.jobId;
