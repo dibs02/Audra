@@ -9,6 +9,11 @@ import { groq } from "../lib/groq";
 loadEnvConfig(process.cwd());
 
 let prisma: Awaited<typeof import("@/lib/prisma")>["prisma"];
+const POLL_INTERVAL_MS = 10_000;
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 async function audioExtract(job: { id: string; fileUrl: string }) {
   console.log("Processing job:", job.id, job.fileUrl);
@@ -93,16 +98,35 @@ async function groqSummarize(transcript: string) {
   return result.choices[0].message.content;
 }
 
+async function cleanupTempFiles(paths: string[]) {
+  await Promise.all(
+    paths
+      .filter(Boolean)
+      .map(async (filePath) => {
+        try {
+          await fs.unlink(filePath);
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+            console.error("Failed to remove temp file", filePath, error);
+          }
+        }
+      }),
+  );
+}
+
 async function main() {
   ({ prisma } = await import("@/lib/prisma"));
+  console.log("Worker started", ffmpeg.version);
 
   while (true) {
     const job = await claimJob();
 
     if (!job) {
-      console.log("No pending jobs found");
-      console.log(ffmpeg.version);
-      break;
+      console.log(
+        `No pending jobs found. Checking again in ${POLL_INTERVAL_MS / 1000}s`,
+      );
+      await sleep(POLL_INTERVAL_MS);
+      continue;
     }
 
     let inputPath = "";
@@ -137,10 +161,7 @@ async function main() {
         data: { status: "FAILED" },
       });
     } finally {
-      await Promise.all([
-        await fs.unlink(inputPath),
-        await fs.unlink(outputPath),
-      ]);
+      await cleanupTempFiles([inputPath, outputPath]);
     }
   }
 }
